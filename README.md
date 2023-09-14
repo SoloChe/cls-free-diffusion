@@ -2,7 +2,10 @@
 This implementation is based on / inspired by:
 OpenAI: [openai/guided-diffusion](https://github.com/openai/guided-diffusion), [openai/improved-diffusion](https://github.com/openai/improved-diffusion) and [ddib](https://github.com/suxuann/ddib).
 
-<!-- <img src="assets/15000.png" height="240" /> -->
+<img src="assets/batch_3_rank_0.png" height="240" />
+
+(40000 steps with batch size 128)
+
 
 ## The main modifications
 the function `condition_clf_free` is added in the script `./guidied_diffusion/gaussian_diffusion.py`. The `ddim` sampling loop can call `condition_clf_free` for classifier-free guidance. Note that `ddpm` sampling is not modified yet. The original implementation of classifier-guided sampling is still working.
