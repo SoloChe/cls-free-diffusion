@@ -45,7 +45,6 @@ def setup_dist():
     
     
 
-
 def dev():
     """
     Get the device to use for torch.distributed.

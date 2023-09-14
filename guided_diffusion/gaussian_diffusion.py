@@ -397,12 +397,15 @@ class GaussianDiffusion:
         """
         cls-free-diff
         """
+        model_kwargs['clf_free'] = True # use clf-free guidance
+        model_kwargs['threshold'] = -1 # make sure disable training mode
+        
         dict_ = model_kwargs.copy() 
-        dict_['threshold'] = -1 # make sure disable training mode
+        # conditional embedding
         eps_cond = model(x, self._scale_timesteps(t), 
                           **dict_)
-
-        dict_['null'] = True # null embedding
+        # null embedding
+        dict_['null'] = True 
         eps_uncond = model(x, self._scale_timesteps(t),
                              **dict_)
         
@@ -585,7 +588,7 @@ class GaussianDiffusion:
         )
         if cond_fn is not None and w == -1:
             out = self.condition_score(cond_fn, out, x, t, model_kwargs=model_kwargs)
-        if w > 0:
+        if w >= 0:
             out = self.condition_clf_free(model, out, x, t, w, model_kwargs=model_kwargs)
 
         # Usually our model outputs epsilon, but we re-derive it

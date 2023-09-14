@@ -17,9 +17,10 @@ from guided_diffusion.script_util import  model_and_diffusion_defaults, add_dict
 
 from torchvision.utils import make_grid, save_image
 
+
 def sample(model, diffusion, num_classes=None, 
            w=None, sample_shape=None, name=None):
-    samples_for_each_cls = 8 # default
+    samples_for_each_cls = 5 # default
     if num_classes is not None: # for clf-free
         samples_for_each_cls = sample_shape[0] // num_classes
         y = th.ones(samples_for_each_cls, dtype=th.long) *\

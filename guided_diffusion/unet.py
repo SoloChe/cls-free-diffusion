@@ -636,7 +636,7 @@ class UNetModel(nn.Module):
         self.middle_block.apply(convert_module_to_f32)
         self.output_blocks.apply(convert_module_to_f32)
 
-    def forward(self, x, timesteps, y=None, threshold=-1, null=False):
+    def forward(self, x, timesteps, y=None, threshold=-1, null=False, clf_free=False):
         """
         Apply the model to an input batch.
 
@@ -656,21 +656,25 @@ class UNetModel(nn.Module):
         if self.num_classes is not None:
             assert y.shape == (x.shape[0],)
             cemb = None
-           
+            
             if threshold != -1: # for clf-free training
                 cemb = self.class_emb(self.label_emb(y))
                 mask = th.rand(cemb.shape[0])<threshold
                 cemb[np.where(mask)[0]] = 0
                 emb = emb + cemb
     
-            else: # for clf-free sampling
+            elif threshold == -1 and clf_free: # for clf-free sampling
                 if null: # null embedding
-                    emb = emb + th.zeros_like(emb)
+                    cemb = th.zeros_like(emb)
                 else: # class condition embedding
-                    emb = emb + self.class_emb(self.label_emb(y)) 
+                    cemb = self.class_emb(self.label_emb(y)) 
                 
-            if cemb == None: # for clf-guided sampling
-                emb = emb + self.label_emb(y)       
+            # for non-clf-free condition embedding
+            elif threshold == -1 and not clf_free:
+                cemb = self.label_emb(y)    
+            
+            assert cemb is not None
+            emb = emb + cemb   
                     
         h = x.type(self.dtype)
         for module in self.input_blocks:

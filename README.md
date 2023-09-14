@@ -2,10 +2,10 @@
 This implementation is based on / inspired by:
 OpenAI: [openai/guided-diffusion](https://github.com/openai/guided-diffusion), [openai/improved-diffusion](https://github.com/openai/improved-diffusion) and [ddib](https://github.com/suxuann/ddib).
 
-<!-- <img src="assets/figure_1.png" height="240" /> -->
+<!-- <img src="assets/15000.png" height="240" /> -->
 
 ## The main modifications
-the function `condition_clf_free` is added in the script `./guidied_diffusion/gaussian_diffusion.py`. The `ddim` sampling loop can call `condition_clf_free` for classifier-free guidance. Note that `ddpm` sampling is not modified yet.
+the function `condition_clf_free` is added in the script `./guidied_diffusion/gaussian_diffusion.py`. The `ddim` sampling loop can call `condition_clf_free` for classifier-free guidance. Note that `ddpm` sampling is not modified yet. The original implementation of classifier-guided sampling is still working.
 
 `torchrun` is used to replace the `mpirun` for convenience. Some modifications about `torchrun` are added in `./guidied_diffusion/dist_utill.py`
 
@@ -17,8 +17,9 @@ The defauslt parameter `--num_class` is set to `None` and `--class_cond` to `Fal
 - `--threshold`: the ratio of data that their label are embedded as null embeddings
 - `-w`: the guidance power during sampling (It will sample during training)
 
-The model and sampled images will be in `./logs_cifar10_guided_$threshold`.
+For classifier-guided sampling, it is the same as the original implementation, except that set `--w -1`, `--threshold -1` and `class_cond True`. 
 
+The model and sampled images will be in `./logs_cifar10_guided_$threshold`.
 
 For other details, please refer to the aforementioned repositories.
 

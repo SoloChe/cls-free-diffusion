@@ -1,11 +1,10 @@
 #!/bin/bash
 
-export OPENAI_LOGDIR="./logs_sample"
+export OPENAI_LOGDIR="./logs_sample_guided"
 echo $OPENAI_LOGDIR
 
 
 model_path="./logs_cifar10_guided_0.1"
-
 
 image_dir="$OPENAI_LOGDIR/images"
 
