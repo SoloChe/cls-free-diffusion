@@ -1,0 +1,10 @@
+__pycache__/
+
+*.DS_store
+*.out
+*.err
+test.ipynb
+
+/logs*/
+/data/
+/slurm_out/
